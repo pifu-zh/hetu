@@ -45,6 +45,20 @@ codex 已做好的事(采集/归并照用它的产物),只做它没做的:
 - 不复刻 codex 记忆的任何既有能力
 - 不联网:embedding 本地推理或明确降级(裁决见 docs)
 
+## 安装
+
+```bash
+git clone https://github.com/pifu-zh/hetu.git && cd hetu
+./install.sh          # 构建二进制 → ~/.local/bin + 注册 MCP + 写召回指令(幂等)
+# 重启 codex 后生效;验证:codex mcp list 应显示 hetu-memory enabled
+```
+
+要求:Rust 工具链(cargo);codex CLI/Desktop。`./install.sh --uninstall`
+反安装(记忆文件保留)。默认 embedding 走智谱(读 codex 配置 token,
+无 embeddings 权益时自动退词法检索);可用 `HETU_MEMORY_EMBED_KEY`
+指定任意兼容端点的 key 激活语义层。
+
 ## 现状
 
-v0 立项。骨架就绪,第一刀 = 语料接入(codex 记忆工件读取器)+ 检索面。
+v0.3:五工具(overview / semantic_search / episodic_search /
+memory_context / memory_write)全链路实测可用。

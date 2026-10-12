@@ -9,7 +9,7 @@
 //! 存储目录:`~/.hetu-memory/`(自有目录,不写 codex 的 memories 树——
 //! 寄生纪律:不碰宿主管辖的文件)。
 
-use crate::threat::{first_threat_message, ThreatScope, DEFAULT_MEMORY_CHAR_LIMIT, DEFAULT_USER_CHAR_LIMIT};
+use crate::threat::{first_threat_message, DEFAULT_MEMORY_CHAR_LIMIT, DEFAULT_USER_CHAR_LIMIT};
 use std::path::{Path, PathBuf};
 
 /// 条目分隔符(hermes/原版同值)。
@@ -180,10 +180,10 @@ impl MemoryStore {
                 if content.trim().is_empty() {
                     return Err("replace requires non-empty content (use remove to delete)".to_string());
                 }
-                self.edit(target, entries, old_text.trim(), Some(content.trim()), limit)
+                self.edit(entries, old_text.trim(), Some(content.trim()), limit)
             }
             MemoryOp::Remove { old_text } => {
-                self.edit(target, entries, old_text.trim(), None, limit)
+                self.edit(entries, old_text.trim(), None, limit)
             }
         }
     }
@@ -192,7 +192,6 @@ impl MemoryStore {
     /// 安全,首个胜出;hermes find_unique_match 同语义)。
     fn edit(
         &self,
-        target: MemoryTarget,
         entries: Vec<String>,
         old_text: &str,
         replacement: Option<&str>,
@@ -225,8 +224,8 @@ impl MemoryStore {
         let action = if replacement.is_some() { "replace" } else { "remove" };
         let mut next = entries;
         match replacement {
-            Some(content) => {
-                let replacement = replacement.unwrap().trim().to_string();
+            Some(replacement_raw) => {
+                let replacement = replacement_raw.trim().to_string();
                 if next[first] == replacement {
                     return Ok((next, "Entry unchanged (identical).".to_string()));
                 }

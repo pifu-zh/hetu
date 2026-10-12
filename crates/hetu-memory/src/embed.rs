@@ -8,8 +8,6 @@
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-/// 单条嵌入输入上限(字符):embedding-3 上下文内,截断保预算。
-const EMBED_INPUT_MAX_CHARS: usize = 1000;
 /// 单批条数上限。
 const BATCH_SIZE: usize = 16;
 
